@@ -27,4 +27,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Query("UPDATE User u SET u.deleted = false WHERE u.id = :id")
     void restoreById(Long id);
+
+    // Pronalaženje korisnika po roli (aktivnih)
+    @Query("SELECT u FROM User u WHERE u.role = :role AND u.deleted = false")
+    List<User> findByRole(String role);
 }
+

@@ -36,4 +36,9 @@ public class UserService {
             userRepository.save(user);
         }
     }
+
+    public List<User> findAllAdmins() {
+        return userRepository.findByRole("ADMIN");
+    }
+
 }

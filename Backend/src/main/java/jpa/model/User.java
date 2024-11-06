@@ -27,6 +27,9 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "role", nullable = false) // Dodajemo ulogu
+    private String role = "USER"; // Podrazumevana vrednost je "USER"
+
     @Column(name = "deleted", nullable = false)
     private boolean deleted = false;
 
@@ -34,10 +37,11 @@ public class User {
     public User() {}
 
     // Parametrizovani konstruktor
-    public User(String username, String email, String password) {
+    public User(String username, String email, String password, String role) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
     // Getteri i setteri
@@ -73,6 +77,14 @@ public class User {
         this.password = password;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public boolean isDeleted() {
         return deleted;
     }
@@ -100,7 +112,8 @@ public class User {
 
     @Override
     public String toString() {
-        return "User [id=" + id + ", username=" + username + ", email=" + email + "]";
+        return "User [id=" + id + ", username=" + username + ", email=" + email + ", role=" + role + "]";
     }
 }
+
 
