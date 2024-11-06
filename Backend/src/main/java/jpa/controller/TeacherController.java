@@ -67,6 +67,7 @@ public class TeacherController {
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<TeacherDTO> saveTeacher(@RequestBody TeacherDTO teacherDTO) {
 
+		System.out.println(teacherDTO);
 		Teacher teacher = new Teacher();
 		teacher.setFirstName(teacherDTO.getFirstName());
 		teacher.setLastName(teacherDTO.getLastName());
