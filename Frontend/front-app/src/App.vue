@@ -5,7 +5,10 @@
   <router-view></router-view>
 </template>
 
-<style scoped>
-/* No global styles here unless needed for your layout */
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
 </style>
-
