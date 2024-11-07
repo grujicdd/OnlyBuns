@@ -1,16 +1,21 @@
 package jpa.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
 
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
+
 @Entity
-@SQLDelete(sql = "UPDATE user SET deleted = true WHERE id = ?")
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username"),
+        @UniqueConstraint(columnNames = "email")
+})
+@SQLDelete(sql = "UPDATE users SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
 public class User {
 
@@ -19,19 +24,30 @@ public class User {
     private Long id;
 
     @Column(name = "username", nullable = false, unique = true)
+    @Size(min = 3, message = "Username must be at least 3 characters long")
     private String username;
 
     @Column(name = "email", nullable = false, unique = true)
+    @Email(message = "Email format is invalid")
     private String email;
 
     @Column(name = "password", nullable = false)
+    @Size(min = 6, message = "Password must be at least 6 characters long")
     private String password;
 
-    @Column(name = "role", nullable = false) // Dodajemo ulogu
-    private String role = "USER"; // Podrazumevana vrednost je "USER"
+    @Column(name = "role", nullable = false)
+    private String role = "USER";
 
     @Column(name = "deleted", nullable = false)
     private boolean deleted = false;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     // Default konstruktor
     public User() {}
@@ -93,14 +109,18 @@ public class User {
         this.deleted = deleted;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return id != null && id.equals(user.id);
     }
