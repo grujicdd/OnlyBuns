@@ -40,4 +40,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Modifying
     @Query("UPDATE Post p SET p.imagePath = :imagePath, p.isCompressed = true WHERE p.id = :id")
     void updateImagePathAndCompressedFlag(Long id, String imagePath);
+
+    @Query("SELECT p.author.id, COUNT(p) FROM Post p GROUP BY p.author.id")
+    List<Object[]> countPostsByUser();
 }

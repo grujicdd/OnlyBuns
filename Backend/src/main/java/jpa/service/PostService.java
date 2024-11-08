@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Service
 public class PostService {
 
-    private static final String UPLOAD_DIR = "uploads/"; // Directory to save uploaded images
+    private static final String UPLOAD_DIR = "../Frontend/front-app/src/assets/"; // Directory to save uploaded images
     private static final String COMPRESSED_DIR = "compressed/"; // Directory to save compressed images
 
     @Autowired
@@ -128,7 +128,7 @@ public class PostService {
             Path path = Paths.get(filePath);
             file.transferTo(path);
 
-            return filePath;
+            return file.getOriginalFilename();
         } catch (IOException e) {
             throw new RuntimeException("Failed to save image file", e);
         }

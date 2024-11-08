@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -70,5 +71,10 @@ public class UserController {
         }
         userService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/postCounts")
+    public Map<Long, Integer> getPostCounts() {
+        return userService.getPostCounts();
     }
 }
