@@ -19,7 +19,7 @@ import jpa.service.TeacherService;
 
 @RestController
 @RequestMapping("/api/teachers")
-@CrossOrigin(origins = "http://localhost:5173") // Specify the allowed origin here
+@CrossOrigin(origins = "http://127.0.0.1:5173") // Specify the allowed origin here
 public class TeacherController {
 
 	@Autowired

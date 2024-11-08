@@ -8,6 +8,7 @@ import Trends from '../components/Trends.vue';
 import NearbyPosts from '../components/NearbyPosts.vue';
 import Chat from '../components/Chat.vue';
 import Profile from '../components/Profile.vue';
+import PostForm from '../components/PostForm.vue';
 
 
 const routes = [
@@ -17,6 +18,7 @@ const routes = [
   { path: '/nearby-posts', name: 'NearbyPosts', component: NearbyPosts },
   { path: '/chat', name: 'Chat', component: Chat },
   { path: '/profile', name: 'Profile', component: Profile },
+  { path: '/post-form', name: 'Post Form', component: PostForm },
 ];
 
 const router = createRouter({

@@ -9,7 +9,8 @@ public class UserDTO {
     private String role;
 
     // Default konstruktor
-    public UserDTO() {}
+    public UserDTO() {
+    }
 
     // Konstruktor za konverziju iz User entiteta
     public UserDTO(User user) {
