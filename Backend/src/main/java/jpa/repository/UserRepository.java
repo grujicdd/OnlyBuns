@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -21,7 +22,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // Vraćanje korisnika po korisničkom imenu (aktivnih)
     @Query("SELECT u FROM User u WHERE u.username = :username AND u.deleted = false")
-    User findByUsername(String username);
+    Optional<User> findByUsername(String username);  // Change to Optional<User>
 
     // Obnavljanje korisnika (soft delete reverse)
     @Modifying

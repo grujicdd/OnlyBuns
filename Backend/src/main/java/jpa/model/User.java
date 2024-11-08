@@ -50,7 +50,8 @@ public class User {
     private LocalDateTime updatedAt;
 
     // Default konstruktor
-    public User() {}
+    public User() {
+    }
 
     // Parametrizovani konstruktor
     public User(String username, String email, String password, String role) {

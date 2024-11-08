@@ -11,6 +11,7 @@
         <li><router-link to="/nearby-posts">Nearby Posts</router-link></li>
         <li><router-link to="/chat">Chat</router-link></li>
         <li><router-link to="/profile">My Profile</router-link></li>
+        <li><router-link to="/post-form">New Post</router-link></li> <!-- New link for PostForm -->
       </ul>
     </nav>
     <router-view></router-view>
