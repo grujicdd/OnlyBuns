@@ -25,13 +25,16 @@ public class Post {
     @Column(name = "description", nullable = false, length = 2000)
     private String description;
 
-    @Column(name = "image_path")  // Stores the path or filename of the image
+    @Column(name = "image_path", nullable = true)  // Stores the path or filename of the image
     private String imagePath;
 
-    @Column(name = "latitude")
+    @Column(name = "is_compressed", nullable = false) // Track if the image is compressed
+    private boolean isCompressed = false;
+
+    @Column(name = "latitude", nullable = true)
     private Double latitude;
 
-    @Column(name = "longitude")
+    @Column(name = "longitude", nullable = true)
     private Double longitude;
 
     @CreationTimestamp
@@ -43,8 +46,7 @@ public class Post {
 
     @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
-
-
+    
     @Column(name = "deleted", nullable = false)
     private boolean deleted = false;
 
@@ -95,6 +97,14 @@ public class Post {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public boolean isCompressed() {
+        return isCompressed;
+    }
+
+    public void setCompressed(boolean compressed) {
+        isCompressed = compressed;
     }
 
     public Double getLatitude() {
@@ -151,5 +161,10 @@ public class Post {
 
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    // Utility method to mark the post's image as compressed
+    public void markImageCompressed() {
+        this.isCompressed = true;
     }
 }

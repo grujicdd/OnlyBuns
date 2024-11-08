@@ -7,6 +7,7 @@ import jpa.model.User;
 import jpa.repository.PostRepository;
 import jpa.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private static final String UPLOAD_DIR = "uploads/"; // Directory to save uploaded images
+    private static final String COMPRESSED_DIR = "compressed/"; // Directory to save compressed images
 
     @Autowired
     private PostRepository postRepository;
@@ -31,6 +34,7 @@ public class PostService {
     @Autowired
     private UserRepository userRepository;
 
+    // Create a new post
     public PostDTO createPost(PostDTO postDTO) {
         Optional<User> author = userRepository.findByUsername(postDTO.getAuthorUsername());
 
@@ -129,4 +133,45 @@ public class PostService {
             throw new RuntimeException("Failed to save image file", e);
         }
     }
+
+    // Compress image files that are older than a month and not yet compressed
+    @Scheduled(cron = "0 0 0 * * ?") // Runs daily at midnight
+    public void compressOldImages() {
+        List<Post> posts = postRepository.findAll();
+        for (Post post : posts) {
+            if (post.getImagePath() != null && !post.isCompressed()) {
+                LocalDateTime oneMonthAgo = LocalDateTime.now().minus(1, ChronoUnit.MONTHS);
+                if (post.getCreatedAt().isBefore(oneMonthAgo)) {
+                    try {
+                        String compressedPath = compressImage(post.getImagePath());
+                        post.setImagePath(compressedPath);
+                        post.setCompressed(true);
+                        postRepository.save(post);
+                        System.out.println("Compressed image for post ID: " + post.getId());
+                    } catch (IOException e) {
+                        System.err.println("Failed to compress image for post ID: " + post.getId());
+                    }
+                }
+            }
+        }
+    }
+
+    // Compress image and save it in the compressed directory
+    private String compressImage(String originalImagePath) throws IOException {
+        Path originalPath = Paths.get(originalImagePath);
+        Path compressedPath = Paths.get(COMPRESSED_DIR);
+
+        if (!Files.exists(compressedPath)) {
+            Files.createDirectories(compressedPath);
+        }
+
+        String compressedFilePath = COMPRESSED_DIR + originalPath.getFileName();
+        Path compressedFile = Paths.get(compressedFilePath);
+
+        // Mock compression logic (Replace this with a real library like Thumbnailator or ImageIO)
+        Files.copy(originalPath, compressedFile);
+
+        return compressedFilePath;
+    }
 }
+
